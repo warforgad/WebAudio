@@ -14,7 +14,13 @@ app.get('/songs/:chunk', function(req, res) {
    res.send(new Buffer(data[req.params.chunk], "binary"))
 })
 
-data['1'] = fs.readFileSync('songs/1.mp3');
+function pushChunk()
+{
+    pushChunk.index = pushChunk.index + 1 || 0;
+    data[pushChunk.index] = fs.readFileSync('songs/' + pushChunk.index + '.mp3');
+}
+
+setInterval(pushChunk, 3000);
 
 var server = app.listen(8081, function () {
    var host = server.address().address
